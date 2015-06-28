@@ -33,13 +33,13 @@ class SessionHandler{
 	 */	
 	public function setDbDetails($dbHost, $dbUser, $dbPassword, $dbDatabase){
 
-		//create db connection
-		$this->dbConnection = new mysqli($dbHost, $dbUser, $dbPassword, $dbDatabase);
-		
-		//check connection
-		if (mysqli_connect_error()) {
-		    throw new Exception('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
-		}//if
+        try {
+    		//create db connection
+    		$this->dbConnection = new PDO('mysql:dbname='.$dbDatabase.';host='.$dbHost, $dbUser, $dbPassword);
+		}
+        catch(PDOException $e) {
+		    throw new Exception('Connect Error (' . $e->getCode() . ') ' . $e->getMessage());
+		}
 			
 	}//function
 	
@@ -86,7 +86,7 @@ class SessionHandler{
      */
     public function close() {
 
-        return $this->dbConnection->close();
+        return $this->dbConnection = null;
 
     }
 
@@ -97,10 +97,9 @@ class SessionHandler{
      */
     public function read($id) {
 
-        $sql = sprintf("SELECT data FROM %s WHERE id = '%s'", $this->dbTable, $this->dbConnection->escape_string($id));
+        $sql = sprintf("SELECT data FROM %s WHERE id = %s", $this->dbTable, $this->dbConnection->quote($id));
         if ($result = $this->dbConnection->query($sql)) {
-            if ($result->num_rows && $result->num_rows > 0) {
-                $record = $result->fetch_assoc();
+            if ($record = $result->fetch(PDO::FETCH_ASSOC)) {
                 return $record['data'];
             } else {
                 return false;
@@ -120,10 +119,10 @@ class SessionHandler{
      */
     public function write($id, $data) {
 
-        $sql = sprintf("REPLACE INTO %s VALUES('%s', '%s', '%s')",
+        $sql = sprintf("REPLACE INTO %s VALUES(%s, %s, '%s')",
         			   $this->dbTable, 
-                       $this->dbConnection->escape_string($id),
-                       $this->dbConnection->escape_string($data),
+                       $this->dbConnection->quote($id),
+                       $this->dbConnection->quote($data),
                        time());
         return $this->dbConnection->query($sql);
 
@@ -136,7 +135,7 @@ class SessionHandler{
      */
     public function destroy($id) {
 
-        $sql = sprintf("DELETE FROM %s WHERE `id` = '%s'", $this->dbTable, $this->dbConnection->escape_string($id));
+        $sql = sprintf("DELETE FROM %s WHERE `id` = %s", $this->dbTable, $this->dbConnection->quote($id));
         return $this->dbConnection->query($sql);
 
 	}
