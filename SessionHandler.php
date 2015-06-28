@@ -1,16 +1,16 @@
 <?php
 
 /**
-* A PHP session handler to keep session data within a MySQL database
+* A PHP session handler to keep session data within a PostgreSQL database
 *
-* @author 	Manuel Reinhard <manu@sprain.ch>
-* @link		https://github.com/sprain/PHP-MySQL-Session-Handler
+* @author 	Ben Albon <ben@albon.me.uk>
+* @link		https://github.com/ben-albon/PHP-PostgreSQL-Session-Handler
 */
 
 class SessionHandler{
 
     /**
-     * a database MySQLi connection resource
+     * a database connection resource
      * @var resource
      */
     protected $dbConnection;
@@ -35,7 +35,7 @@ class SessionHandler{
 
         try {
     		//create db connection
-    		$this->dbConnection = new PDO('mysql:dbname='.$dbDatabase.';host='.$dbHost, $dbUser, $dbPassword);
+    		$this->dbConnection = new PDO('pgsql:dbname='.$dbDatabase.';host='.$dbHost, $dbUser, $dbPassword);
 		}
         catch(PDOException $e) {
 		    throw new Exception('Connect Error (' . $e->getCode() . ') ' . $e->getMessage());
@@ -47,7 +47,7 @@ class SessionHandler{
 	
 	/**
 	 * Inject DB connection from outside
-	 * @param 	object	$dbConnection	expects MySQLi object
+	 * @param 	object	$dbConnection	expects db object
 	 */
 	public function setDbConnection($dbConnection){
 	
@@ -58,7 +58,7 @@ class SessionHandler{
 	
 	/**
 	 * Inject DB connection from outside
-	 * @param 	object	$dbConnection	expects MySQLi object
+	 * @param 	object	$dbConnection	expects db object
 	 */
 	public function setDbTable($dbTable){
 	
@@ -129,7 +129,7 @@ class SessionHandler{
     }
 
     /**
-     * Destoroy the session
+     * Destroy the session
      * @param int session id
      * @return bool
      */
