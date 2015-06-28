@@ -1,5 +1,7 @@
-PHP MySQL Session Handler
+PHP PostgreSQL Session Handler
 ========================
+
+WORK IN PROGRESS!
 
 Installation
 ----------------------------
