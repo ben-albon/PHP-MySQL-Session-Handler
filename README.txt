@@ -18,7 +18,7 @@ Installation
 ----------------------------
 First you need to create a table in your database:
 
-CREATE TABLE session_handler_table (
+CREATE TABLE session (
     session_id varchar(255) NOT NULL,
     session_data text NOT NULL,
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
