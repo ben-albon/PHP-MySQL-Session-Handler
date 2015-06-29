@@ -88,8 +88,8 @@ class PostgreSQLSessionHandler implements SessionHandlerInterface{
 	* @usage execution rate 1/100
 	*        (session.gc_probability/session.gc_divisor)
 	*/
-	public function gc( $max ) {
-		$sql = "DELETE FROM session WHERE timestamp < DATE_SUB(NOW(), INTERVAL " . $lifetime . " SECOND)";
+	public function gc( $lifetime ) {
+		$sql = "DELETE FROM session WHERE timestamp < NOW() - INTERVAL '" . $lifetime . " second'";
 		return $this->dbConnection->query($sql);
 	}
 }//class
