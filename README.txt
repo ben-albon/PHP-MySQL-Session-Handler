@@ -1,6 +1,5 @@
 PHP PostgreSQL Session Handler
 ========================
-WORK IN PROGRESS!
 
 Requirements
 ----------------------------
@@ -16,7 +15,7 @@ http://php.net/SessionHandlerInterface
 
 Installation
 ----------------------------
-First you need to create a table in your database:
+Create the the session table in your database:
 
 CREATE TABLE session (
     session_id varchar(255) NOT NULL,
@@ -25,4 +24,16 @@ CREATE TABLE session (
     PRIMARY KEY (session_id)
     );
 
-Then see example.php
+Include the following code to start your session (see example.php, or better yet: require_once('example.php'); so that you don't need to change database credentials in every php file if they ever change)
+
+<?php
+require_once('PostgreSQLSessionHandler.php');
+// REPLACE WITH DATABASE CREDENTIALS
+$sessionHandler = new PostgreSQLSessionHandler('db_host', 'db_user', 'db_passswd', 'db_name');
+
+session_set_save_handler($sessionHandler);
+register_shutdown_function('session_write_close');
+
+session_start();
+?>
+

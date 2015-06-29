@@ -1,5 +1,6 @@
 <?php
 require_once('PostgreSQLSessionHandler.php');
+// REPLACE WITH DATABASE CREDENTIALS
 $sessionHandler = new PostgreSQLSessionHandler('db_host', 'db_user', 'db_passswd', 'db_name');
 
 session_set_save_handler($sessionHandler);
